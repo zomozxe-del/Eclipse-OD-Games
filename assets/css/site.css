@@ -98,7 +98,7 @@ h2.no-animation{ animation: none !important; opacity: 1; }
 
 /* Games page */
 .games-container{ position: relative; z-index: 2; padding: 60px 20px 80px; min-height: 100vh; margin-top: 50px; }
-.games-title-corner{ position: absolute; top: 45px; left: 20px; }
+.games-title-corner{ position: absolute; top: 20px; left: 20px; }
 .games-title-corner h1{ font-size: 32px; margin: 0; text-align: left; animation: slideInDown 1s ease forwards; opacity: 0; }
 .games-title-corner h1.no-animation{ animation: none !important; opacity: 1; }
 .games-controls{ padding: 0 12px 20px; text-align: center; }
