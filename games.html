@@ -242,6 +242,13 @@
       return s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
     }
 
+    function getImagePath(gameName) {
+      // Convert game name to image filename (lowercase, no special chars)
+      const clean = gameName.replace(/\/+$/,'').replace('.html', '');
+      const imageName = clean.toLowerCase().replace(/[-_]/g, '');
+      return `assets/gameimages/${imageName}.png`;
+    }
+
     function loadGames() {
       const grid = document.getElementById('gamesGrid');
       const loader = document.getElementById('loader');
@@ -261,6 +268,7 @@
           a.className = 'card';
           a.href = href;
           a.target = '_self';
+          a.style.backgroundImage = `url('${getImagePath(clean)}')`;
 
           const title = document.createElement('div');
           title.className = 'title';
