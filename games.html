@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Games — Eclipse OD</title>
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <canvas id="snow"></canvas>
+  <header class="page-header">
+    <h1>Games</h1>
+    <div class="tools">Browse the collection — click a card to open the game folder</div>
+  </header>
+
+  <main>
+    <section class="games-grid" id="gamesGrid" aria-live="polite"></section>
+  </main>
+
+  <script>
+    // List of games collected from repository
+    const games = [
+      ".DS_Store",
+      "5b/",
+      "ages-of-conflict/",
+      "angry-birds/",
+      "animal-arena/",
+      "animals-volleyball/",
+      "armed-forces-io/",
+      "bacon-may-die/",
+      "bad-piggies/",
+      "bank-robbery/",
+      "bank-robbery-2/",
+      "bank-robbery-3/",
+      "basket-random/",
+      "basketball-stars/",
+      "basketbros-io/",
+      "battle-wheels/",
+      "bitlife/",
+      "block-blast/",
+      "blumgi-ball/",
+      "blumgi-bloom/",
+      "blumgi-castle/",
+      "blumgi-dragon/",
+      "blumgi-paintball/",
+      "blumgi-racers/",
+      "blumgi-rocket/",
+      "blumgi-slime/",
+      "blumgi-soccer/",
+      "bobble/",
+      "breaking-the-bank/",
+      "buenos-aires/",
+      "BuildNowGG/",
+      "bullet-bros/",
+      "bulletzio/",
+      "burnout-extreme-drift-2/",
+      "candy-crush/",
+      "catpad/",
+      "chicago/",
+      "chicken-merge/",
+      "chicken-merge-2/",
+      "choppy-orc/",
+      "cluster-rush/",
+      "cookie-clicker/",
+      "core-ball/",
+      "cow-bay/",
+      "crazy-bikes/",
+      "crazy-cars/",
+      "crossy-road/",
+      "csgo-clicker/",
+      "cut-the-rope/",
+      "dadish/",
+      "dadish-2/",
+      "dadish-3/",
+      "dadish-3d/",
+      "day-of-meat-castle/",
+      "day-of-meat-radiation/",
+      "doodle-jump/",
+      "double-panda/",
+      "dreadhead-parkour/",
+      "drift-boss/",
+      "drift-hunters/",
+      "drive-mad/",
+      "ducklings-io/",
+      "dune/",
+      "eaglercraft/",
+      "eclicker/",
+      "economical/",
+      "economical-2/",
+      "emulatorjs/",
+      "escaping-the-prison/",
+      "fantasy-fest/",
+      "flappy-bird/",
+      "fleeing-the-complex/",
+      "flip-bros/",
+      "four-colors/",
+      "funny-shooter-2/",
+      "GBA-Emulator/",
+      "geometry-dash/",
+      "gladihoppers/",
+      "gobattle/",
+      "gobble/",
+      "gold-digger-fr-vr/",
+      "goober-world/",
+      "googlebaseball/",
+      "greece-love-odyssey/",
+      "happy-wheels/",
+      "hawaii/",
+      "idle-breakout/",
+      "idle-farming-business/",
+      "idle-gang/",
+      "idle-light-city/",
+      "idle-mining-empire/",
+      "idle-startup-tycoon/",
+      "infiltrating-the-airship/",
+      "iron-snout/",
+      "jacksmith/",
+      "jump-only/",
+      "justfalllol/",
+      "karlson/",
+      "ks-2-teams/",
+      "level-devil/",
+      "london/",
+      "mario-64/",
+      "master-checkers/",
+      "master-chess/",
+      "merge-the-numbers/",
+      "merge-tycoon/",
+      "mine-line/",
+      "minecraft-1.12/",
+      "monkey-mart/",
+      "monkeytype-lite/",
+      "monster-tracks/",
+      "moto-x3m/",
+      "motox3m-pool/",
+      "motox3m-spooky/",
+      "motox3m-winter/",
+      "motox3m2/",
+      "new-york/",
+      "one-chance/",
+      "ovo/",
+      "ovo-dimensions/",
+      "paper-io/",
+      "physibox/",
+      "poly-track/",
+      "poor-bunny/",
+      "poor-eddie/",
+      "push-your-luck/",
+      "race-survival-arena-king/",
+      "recoil/",
+      "retro-bowl/",
+      "retro-bowl-college/",
+      "retro-highway/",
+      "rio/",
+      "rocket-soccer-derby/",
+      "rooftop-snipers/",
+      "rooftop-snipers-2/",
+      "run-3/",
+      "sausage-flip/",
+      "seoul/",
+      "shadow-trick/",
+      "skiddy-taxi/",
+      "slope/",
+      "slow-roads/",
+      "snow-rider-3d/",
+      "snowball-io/",
+      "soccer-random/",
+      "soccer-skills-champions-league/",
+      "soccer-skills-euro-cup/",
+      "soccer-skills-world-cup/",
+      "space-major-miner/",
+      "space-thing/",
+      "space-wars-battleground/",
+      "speed-king/",
+      "stack/",
+      "stealing-the-diamond/",
+      "stickman-bike/",
+      "stickman-hook/",
+      "stickman-hook-halloween/",
+      "subway-surfers/",
+      "super-fowlst/",
+      "super-fowlst-2/",
+      "super-liquid-soccer/",
+      "super-tunnel-rush/",
+      "superautopets/",
+      "superhot/",
+      "swingo/",
+      "table-tennis-world-tour/",
+      "tag/",
+      "tag-2/",
+      "tanuki-sunset/",
+      "the-impossible-quiz-2/",
+      "tightrope-theatre/",
+      "time-shooter-2/",
+      "time-shooter-3/",
+      "tiny-fishing/",
+      "tokyo/",
+      "tomb-of-the-mask/",
+      "tower-defense-mingling/",
+      "tunnel-rush/",
+      "tunnel-rush-2/",
+      "turbo-moto-racer/",
+      "under-the-red-sky/",
+      "undertale.html",
+      "underwater/",
+      "unicycle-hero/",
+      "unicycle-legend/",
+      "vegas-queens/",
+      "venge-io/",
+      "vex-3/",
+      "vex-4/",
+      "vex-5/",
+      "vex-6/",
+      "vex-7/",
+      "vex-8/",
+      "vex-x3m/",
+      "volley-random/",
+      "water-polo-ragdoll/",
+      "watermelon-game/",
+      "yohoho-io/",
+      "yokai-dungeon/",
+      "zombie-rush/",
+      "zooplop/"
+    ];
+
+    const grid = document.getElementById('gamesGrid');
+
+    function prettify(name){
+      const s = name.replace(/\/+$/,'').replace(/[-_]/g,' ');
+      return s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+    }
+
+    for(const g of games){
+      if(!g || g === '.DS_Store') continue;
+      const clean = g.replace(/\/+$/,'');
+      const href = (clean.endsWith('.html')) ? `assets/games/${clean}` : `assets/games/${clean}/`;
+
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = href;
+      a.target = '_blank';
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = prettify(clean.replace('.html',''));
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = href;
+
+      a.appendChild(title);
+      a.appendChild(meta);
+      grid.appendChild(a);
+    }
+
+    // Snow renderer reused from index (simple)
+    (function(){
+      const canvas = document.getElementById('snow');
+      const ctx = canvas.getContext('2d');
+      function fit(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+      fit(); window.addEventListener('resize', fit);
+      const flakes = Array.from({length:120}).map(()=>({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*3+1, d:Math.random() }));
+      let angle = 0;
+      function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='white'; ctx.beginPath(); for(const f of flakes){ ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); } ctx.fill(); angle+=0.01; for(let i=0;i<flakes.length;i++){ const f=flakes[i]; f.y+=Math.pow(f.d,2)+0.8; f.x+=Math.sin(angle)*0.4; if(f.y>canvas.height) flakes[i]={ x:Math.random()*canvas.width, y:0, r:f.r, d:f.d }; } }
+      setInterval(draw,33);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* Global */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body{height:100%;}
+body{
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top, #0b0b12, #000);
+  color: #eaeaea;
+  overflow-x: hidden;
+}
+
+canvas{ position: fixed; inset: 0; z-index: 0; }
+
+.container{ position: relative; z-index: 2; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:48px 20px; }
+h1{ font-size: clamp(36px,8vw,88px); letter-spacing:4px; text-shadow:0 0 20px rgba(255,255,255,0.06); }
+.subtitle{ margin-top:8px; color:#bdbdbd; }
+
+.hero-actions{ margin-top:28px; display:flex; gap:14px; }
+.btn{ display:inline-block; padding:12px 20px; border-radius:10px; text-decoration:none; color:inherit; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); transition:all .18s ease; }
+.btn.primary{ background:linear-gradient(90deg,#5ee7df,#b490ca); color:#051018; font-weight:700; border:none; box-shadow:0 6px 20px rgba(90,82,255,0.12); }
+.btn:hover{ transform:translateY(-4px); }
+
+/* Games page */
+.games-grid{ display:grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap:18px; width:100%; max-width:1200px; margin:40px auto 80px; padding:0 12px; }
+.card{ background:rgba(255,255,255,0.03); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:8px; align-items:center; justify-content:center; min-height:120px; text-decoration:none; color:inherit; border:1px solid rgba(255,255,255,0.04); transition:transform .18s ease, box-shadow .18s ease; }
+.card:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(0,0,0,0.6); }
+.card .title{ font-weight:600; font-size:16px; text-align:center; }
+.card .meta{ font-size:12px; color:#cfcfcf; }
+
+.page-header{ padding:28px 12px 8px; text-align:center; }
+.tools{ margin-top:8px; font-size:13px; color:#bdbdbd; }
+
+/* small screens */
+@media (max-width:520px){ .hero-actions{ flex-direction:column; } .games-grid{ grid-template-columns: repeat(2,1fr); } }
