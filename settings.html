@@ -33,8 +33,24 @@
         </div>
 
         <div class="settings-group" style="margin-top: 24px;">
+            <label style="font-size: 16px;">
+                <input type="checkbox" id="lowQualityToggle" style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
+                <span style="font-weight: 600; color: #ffffff;">Low Quality Mode</span>
+            </label>
+            <p style="font-size: 13px; color: #cccccc; margin-top: 8px; margin-left: 30px;">Load fewer games to boost performance</p>
+        </div>
+
+        <div class="settings-group" style="margin-top: 24px;">
+            <label style="font-size: 16px;">
+                <input type="checkbox" id="cloakingToggle" style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
+                <span style="font-weight: 600; color: #ffffff;">Enable Cloaking</span>
+            </label>
+            <p style="font-size: 13px; color: #cccccc; margin-top: 8px; margin-left: 30px;">Hide site title and URL from browser</p>
+        </div>
+
+        <div class="settings-group" style="margin-top: 24px;">
             <label for="themeSelect" style="font-size: 16px; font-weight: 600; color: #ffffff;">Theme:</label>
-            <select id="themeSelect" style="margin-top: 8px; width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #ffffff; font-size: 14px;">
+            <select id="themeSelect" style="margin-top: 8px; width: 100%; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; color: #000000; font-size: 14px;">
                 <option value="theme-bw">Black & White (Default)</option>
                 <option value="theme-dark">Dark Original</option>
                 <option value="theme-neon">Neon</option>
@@ -45,12 +61,39 @@
 
         <div class="settings-group" style="margin-top: 24px;">
             <label for="urlSpoofInput" style="font-size: 16px; font-weight: 600; color: #ffffff;">Spoof URL (optional):</label>
-            <input type="text" id="urlSpoofInput" placeholder="e.g., /games or blank" style="margin-top: 8px; width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #ffffff; font-size: 14px;">
+            <input type="text" id="urlSpoofInput" placeholder="e.g., about:blank, /games, or blank" style="margin-top: 8px; width: 100%; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; color: #000000; font-size: 14px;">
             <p style="font-size: 13px; color: #cccccc; margin-top: 8px;">This is a local setting and doesn't affect actual URLs</p>
         </div>
 
         <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
             <p style="font-size: 13px; color: #aaaaaa; text-align: center;">All settings are saved locally in your browser</p>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="color: #ffffff; font-size: 16px; margin: 0 0 16px 0;">📡 Server Status</h3>
+            <div style="font-size: 13px; color: #cccccc; line-height: 1.8;">
+                <div>Status: <span id="statusHealth" style="color: #00ff88;">healthy</span></div>
+                <div>Latency: <span id="statusLatency">13 ms</span></div>
+                <div>Last Update: <span id="statusTime">---</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="color: #ffffff; font-size: 16px; margin: 0 0 16px 0;">💻 System Info</h3>
+            <div style="font-size: 13px; color: #cccccc; line-height: 1.8;">
+                <div>RAM Usage: <span id="statusRAM">--- MB / --- MB</span></div>
+                <div>Uptime: <span id="statusUptime">--- h --- m --- s</span></div>
+                <div>Platform: <span id="statusPlatform">web</span></div>
+                <div>Node Version: <span id="statusNode">v18.19.1</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 20px; border-bottom: none;">
+            <h3 style="color: #ffffff; font-size: 16px; margin: 0 0 16px 0;">🎮 Site Performance</h3>
+            <div style="font-size: 13px; color: #cccccc; line-height: 1.8;">
+                <div>FPS: <span id="statusFPS">---</span></div>
+                <div>Loaded Games: <span id="statusGames">0</span></div>
+            </div>
         </div>
     </div>
 </div>
@@ -61,12 +104,15 @@
 const settings = {
   animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
   theme: localStorage.getItem('theme') || 'theme-bw',
-  urlSpoof: localStorage.getItem('urlSpoof') || ''
+  urlSpoof: localStorage.getItem('urlSpoof') || '',
+  lowQuality: localStorage.getItem('lowQuality') === 'true',
+  cloaking: localStorage.getItem('cloaking') === 'true'
 };
 
 function applySetting(key, value) {
   if (key === 'animationEnabled') {
     document.body.classList.toggle('animations-disabled', !value);
+    document.body.classList.toggle('grid-bg', !value);
     document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
       if (!value) el.classList.add('no-animation');
       else el.classList.remove('no-animation');
@@ -74,6 +120,12 @@ function applySetting(key, value) {
   } else if (key === 'theme') {
     document.body.className = document.body.className.replace(/theme-\w+/, value);
     document.body.classList.add(value);
+  } else if (key === 'cloaking') {
+    if (value) {
+      document.title = 'Google Classroom';
+    } else {
+      document.title = 'Games — Eclipse OD';
+    }
   }
   localStorage.setItem(key, value);
 }
@@ -102,6 +154,16 @@ document.getElementById('animationToggle').addEventListener('change', (e) => {
   applySetting('animationEnabled', e.target.checked);
 });
 
+document.getElementById('lowQualityToggle').addEventListener('change', (e) => {
+  settings.lowQuality = e.target.checked;
+  localStorage.setItem('lowQuality', e.target.checked);
+});
+
+document.getElementById('cloakingToggle').addEventListener('change', (e) => {
+  settings.cloaking = e.target.checked;
+  applySetting('cloaking', e.target.checked);
+});
+
 document.getElementById('urlSpoofInput').addEventListener('change', (e) => {
   settings.urlSpoof = e.target.value;
   localStorage.setItem('urlSpoof', e.target.value);
@@ -110,7 +172,40 @@ document.getElementById('urlSpoofInput').addEventListener('change', (e) => {
 // Set current values
 document.getElementById('themeSelect').value = settings.theme;
 document.getElementById('animationToggle').checked = settings.animationEnabled;
+document.getElementById('lowQualityToggle').checked = settings.lowQuality;
+document.getElementById('cloakingToggle').checked = settings.cloaking;
 document.getElementById('urlSpoofInput').value = settings.urlSpoof;
+
+// Apply cloaking on load if enabled
+if (settings.cloaking) {
+  document.title = 'Google Classroom';
+}
+if (!settings.animationEnabled) {
+  document.body.classList.add('grid-bg');
+}
+
+/* ========= STATUS UPDATES ========= */
+function updateStatus() {
+  // Simulate server status
+  const latencies = [12, 13, 14, 15];
+  document.getElementById('statusLatency').textContent = latencies[Math.floor(Math.random() * latencies.length)] + ' ms';
+  document.getElementById('statusTime').textContent = new Date().toLocaleString();
+  
+  // Simulated system info (would come from server in real app)
+  const ramMB = Math.floor(4000 + Math.random() * 1000);
+  document.getElementById('statusRAM').textContent = ramMB.toLocaleString() + ' MB / 11961 MB';
+  
+  // Calculate uptime
+  const date = new Date(2025, 6, 1); // Start date
+  const uptime = Date.now() - date.getTime();
+  const hours = Math.floor(uptime / 3600000);
+  const minutes = Math.floor((uptime % 3600000) / 60000);
+  const seconds = Math.floor((uptime % 60000) / 1000);
+  document.getElementById('statusUptime').textContent = hours.toLocaleString() + ' h ' + minutes + ' m ' + seconds + ' s';
+}
+
+updateStatus();
+setInterval(updateStatus, 1000);
 
 /* ========= SNOW PARTICLES ========= */
 

@@ -53,7 +53,10 @@ body.theme-bw{
   --text-muted: #ffffff;
 }
 
+body.grid-bg { background: #000000 repeating-linear-gradient(0deg, transparent, transparent 19px, #333333 19px, #333333 20px) repeating-linear-gradient(90deg, transparent, transparent 19px, #333333 19px, #333333 20px) !important; }
+
 canvas{ position: fixed; inset: 0; z-index: 0; }
+body.grid-bg canvas { display: none; }
 
 /* Navigation */
 .nav-tabs{ position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 0; padding: 0; justify-content: space-between; align-items: center; }

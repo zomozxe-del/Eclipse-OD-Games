@@ -343,8 +343,14 @@
         // Clear existing cards
         grid.innerHTML = '';
 
+        // Get games to load based on quality mode
+        let gamesToLoad = games;
+        if(settings.lowQuality) {
+          gamesToLoad = games.slice(0, 50); // Load only first 50 games in low quality mode
+        }
+
         let displayedCount = 0;
-        for(const g of games){
+        for(const g of gamesToLoad){
           if(!g || g === '.DS_Store') continue;
           const clean = g.replace(/\/+$/,'');
           const displayName = prettify(clean.replace('.html',''));
@@ -405,30 +411,36 @@
       // Apply URL spoofer if enabled (client-side only)
       let finalUrl = gameUrl;
       if(settings.urlSpoof && settings.urlSpoof.trim()) {
-        // Create a simple loader page that references the spoof URL
-        // This is done by creating a data URI that loads the game from the specified path
-        const spoofedPath = settings.urlSpoof.endsWith('/') 
-          ? settings.urlSpoof + gameUrl.split('/').pop() 
-          : settings.urlSpoof;
+        const spoof = settings.urlSpoof.toLowerCase().trim();
         
-        // Create an HTML page that sets the referrer and loads the game
-        const loaderHtml = `<!DOCTYPE html>
+        // Handle about:blank
+        if (spoof === 'about:blank') {
+          finalUrl = 'about:blank';
+        } else {
+          // Create a simple loader page that references the spoof URL
+          const spoofedPath = spoof.endsWith('/') 
+            ? spoof + gameUrl.split('/').pop() 
+            : spoof;
+          
+          // Create an HTML page that sets the referrer and loads the game
+          const loaderHtml = `<!DOCTYPE html>
 <html>
 <head>
   <meta name="referrer" content="no-referrer">
   <style>body { margin: 0; padding: 0; }</style>
 </head>
 <body>
-  <iframe id="gameFrame" src="${gameUrl}" style="width:100%;height:100%;border:none;" allow="autoplay; fullscreen"></iframe>
+  <iframe id="gameFrame" src="${gameUrl}" style="width:100%;height:100%;border:none;" allow="autoplay *; fullscreen *; accelerometer *; camera *; gyroscope *; magnetometer *; microphone *; usb *; xr-spatial-tracking *"></iframe>
   <script>
     // Spoof URL reference
     window.location.href = '${spoofedPath}#${btoa(gameUrl)}';
   <\/script>
 </body>
 </html>`;
-        
-        const blob = new Blob([loaderHtml], { type: 'text/html' });
-        finalUrl = URL.createObjectURL(blob);
+          
+          const blob = new Blob([loaderHtml], { type: 'text/html' });
+          finalUrl = URL.createObjectURL(blob);
+        }
       }
       
       frame.src = finalUrl;
@@ -467,15 +479,24 @@
     const settings = {
       animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
       theme: localStorage.getItem('theme') || 'theme-bw',
-      urlSpoof: localStorage.getItem('urlSpoof') || ''
+      urlSpoof: localStorage.getItem('urlSpoof') || '',
+      lowQuality: localStorage.getItem('lowQuality') === 'true',
+      cloaking: localStorage.getItem('cloaking') === 'true'
     };
 
     function applySetting(key, value) {
       if (key === 'animationEnabled') {
         document.body.classList.toggle('animations-disabled', !value);
+        document.body.classList.toggle('grid-bg', !value);
       } else if (key === 'theme') {
         document.body.className = document.body.className.replace(/theme-\w+/, value);
         document.body.classList.add(value);
+      } else if (key === 'cloaking') {
+        if (value) {
+          document.title = 'Google Classroom';
+        } else {
+          document.title = 'Games — Eclipse OD';
+        }
       }
       localStorage.setItem(key, value);
     }
@@ -484,6 +505,10 @@
       document.body.classList.add(settings.theme);
       if (!settings.animationEnabled) {
         document.body.classList.add('animations-disabled');
+        document.body.classList.add('grid-bg');
+      }
+      if (settings.cloaking) {
+        document.title = 'Google Classroom';
       }
     }
 

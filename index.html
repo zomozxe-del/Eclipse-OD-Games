@@ -37,12 +37,15 @@
 const settings = {
   animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
   theme: localStorage.getItem('theme') || 'theme-bw',
-  urlSpoof: localStorage.getItem('urlSpoof') || ''
+  urlSpoof: localStorage.getItem('urlSpoof') || '',
+  lowQuality: localStorage.getItem('lowQuality') === 'true',
+  cloaking: localStorage.getItem('cloaking') === 'true'
 };
 
 function applySetting(key, value) {
   if (key === 'animationEnabled') {
     document.body.classList.toggle('animations-disabled', !value);
+    document.body.classList.toggle('grid-bg', !value);
     document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
       if (!value) el.classList.add('no-animation');
       else el.classList.remove('no-animation');
@@ -50,6 +53,12 @@ function applySetting(key, value) {
   } else if (key === 'theme') {
     document.body.className = document.body.className.replace(/theme-\w+/, value);
     document.body.classList.add(value);
+  } else if (key === 'cloaking') {
+    if (value) {
+      document.title = 'Google Classroom';
+    } else {
+      document.title = 'Eclipse OD';
+    }
   }
   localStorage.setItem(key, value);
 }
@@ -58,9 +67,13 @@ function initializeSettings() {
   document.body.classList.add(settings.theme);
   if (!settings.animationEnabled) {
     document.body.classList.add('animations-disabled');
+    document.body.classList.add('grid-bg');
     document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
       el.classList.add('no-animation');
     });
+  }
+  if (settings.cloaking) {
+    document.title = 'Google Classroom';
   }
 }
 
