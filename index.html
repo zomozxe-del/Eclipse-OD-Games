@@ -12,6 +12,9 @@
 
 <canvas id="snow"></canvas>
 
+  <!-- Failover banner placeholder (shown when redirected from manager) -->
+  <div id="failoverBannerIndex" class="failover-banner" style="display:none;"></div>
+
 <nav class="nav-tabs">
     <div class="nav-tabs-left">
         <a href="index.html" class="active">Main Page</a>
@@ -158,6 +161,21 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// Show failover banner when redirected
+function showFailoverBannerIfNeeded() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('fail') === 'true') {
+    const from = p.get('from') || 'primary';
+    const time = p.get('time') ? new Date(p.get('time')).toLocaleString() : '';
+    const reason = p.get('reason') || 'unreachable';
+    const banner = document.getElementById('failoverBannerIndex');
+    banner.innerHTML = `<div><strong>Notice:</strong> Previous site (${from}) is down (${reason}). Switched to this site. <small>As of ${time}</small></div>`;
+    banner.style.display = 'block';
+    document.body.style.paddingTop = '56px';
+  }
+}
+showFailoverBannerIfNeeded();
 </script>
 
 </body>

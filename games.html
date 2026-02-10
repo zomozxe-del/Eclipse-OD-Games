@@ -9,6 +9,9 @@
 <body>
   <canvas id="snow"></canvas>
 
+  <!-- Failover banner placeholder (shown when redirected from manager) -->
+  <div id="failoverBannerGames" class="failover-banner" style="display:none;"></div>
+
   <nav class="nav-tabs">
     <div class="nav-tabs-left">
         <a href="index.html">Main Page</a>
@@ -546,6 +549,24 @@
       let angle = 0;
       function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='white'; ctx.beginPath(); for(const f of flakes){ ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); } ctx.fill(); angle+=0.01; for(let i=0;i<flakes.length;i++){ const f=flakes[i]; f.y+=Math.pow(f.d,2)+0.8; f.x+=Math.sin(angle)*0.4; if(f.y>canvas.height) flakes[i]={ x:Math.random()*canvas.width, y:0, r:f.r, d:f.d }; } }
       setInterval(draw,33);
+    })();
+    
+    // Failover banner display when redirected from failover manager
+    (function(){
+      function showFailoverBannerIfNeeded(){
+        const p = new URLSearchParams(location.search);
+        if (p.get('fail') === 'true'){
+          const from = p.get('from') || 'primary';
+          const time = p.get('time') ? new Date(p.get('time')).toLocaleString() : '';
+          const reason = p.get('reason') || 'unreachable';
+          const banner = document.getElementById('failoverBannerGames');
+          if(!banner) return;
+          banner.innerHTML = `<div><strong>Notice:</strong> Previous site (${from}) is down (${reason}). Switched to this site. <small>As of ${time}</small></div>`;
+          banner.style.display = 'block';
+          document.body.style.paddingTop = '56px';
+        }
+      }
+      showFailoverBannerIfNeeded();
     })();
   </script>
 
