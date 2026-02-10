@@ -9,8 +9,9 @@
 <body>
   <canvas id="snow"></canvas>
   <header class="page-header">
+    <a class="btn" href="index.html" style="position:absolute;top:18px;left:18px;">← Home</a>
     <h1>Games</h1>
-    <div class="tools">Browse the collection — click a card to open the game folder</div>
+    <div class="tools">Browse the collection — click a card to open and play</div>
   </header>
 
   <main>
@@ -233,23 +234,18 @@
     for(const g of games){
       if(!g || g === '.DS_Store') continue;
       const clean = g.replace(/\/+$/,'');
-      const href = (clean.endsWith('.html')) ? `assets/games/${clean}` : `assets/games/${clean}/`;
+      const href = (clean.endsWith('.html')) ? `assets/games/${clean}` : `assets/games/${clean}/index.html`;
 
       const a = document.createElement('a');
       a.className = 'card';
       a.href = href;
-      a.target = '_blank';
+      a.target = '_self';
 
       const title = document.createElement('div');
       title.className = 'title';
       title.textContent = prettify(clean.replace('.html',''));
 
-      const meta = document.createElement('div');
-      meta.className = 'meta';
-      meta.textContent = href;
-
       a.appendChild(title);
-      a.appendChild(meta);
       grid.appendChild(a);
     }
 

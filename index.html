@@ -16,14 +16,33 @@
     <h1>Eclipse OD</h1>
     <div class="subtitle">– zomo</div>
 
-    <div class="games">
-        <a class="game" id="play-polytrack" href="#">Play PolyTrack</a>
-        <a class="game" href="#">Game 2</a>
-        <a class="game" href="#">Game 3</a>
-        <a class="game" href="#">Game 4</a>
+    <div class="hero-actions">
+        <a class="btn primary" href="games.html">Browse All Games</a>
+    </div>
+
+    <div style="margin-top:60px; text-align:center;">
+        <h2 style="font-size:28px; margin-bottom:20px; color:#bdbdbd;">Featured Games</h2>
+        <div class="games-grid" id="featuredGames"></div>
     </div>
 </div>
 <script>
+
+/* ========= FEATURED GAMES ========= */
+const featuredGames = ['drift-boss', 'subway-surfers', 'cookie-clicker', 'crossy-road', 'slope', 'minecraft-1.12', 'geometry-dash', 'flappy-bird'];
+
+function loadFeatured() {
+    const cont = document.getElementById('featuredGames');
+    featuredGames.forEach(game => {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = `https://education-eclipse.netlify.app/${game}`;
+        a.target = '_blank';
+        const name = game.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        a.innerHTML = `<div class="title">${name}</div>`;
+        cont.appendChild(a);
+    });
+}
+loadFeatured();
 
 /* ========= SNOW PARTICLES ========= */
 
@@ -85,42 +104,6 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
-</script>
-
-<!-- PolyTrack game modal -->
-<div id="game-modal" aria-hidden="true">
-    <button id="game-close">Close ✕</button>
-    <iframe id="game-iframe" src="games/PolyTrack/public/assets/games/poly-track/poly-track.html" allow="fullscreen"></iframe>
-</div>
-
-<script>
-// Wire Play button to open the PolyTrack iframe modal
-(() => {
-    const playBtn = document.getElementById('play-polytrack');
-    const modal = document.getElementById('game-modal');
-    const closeBtn = document.getElementById('game-close');
-
-    if (!playBtn || !modal) return;
-
-    function openModal(e) {
-        if (e) e.preventDefault();
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeModal() {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-    }
-
-    playBtn.addEventListener('click', openModal);
-    closeBtn && closeBtn.addEventListener('click', closeModal);
-
-    // Close on Escape
-    window.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Escape') closeModal();
-    });
-})();
 </script>
 
 </body>

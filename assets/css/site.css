@@ -12,6 +12,7 @@ canvas{ position: fixed; inset: 0; z-index: 0; }
 
 .container{ position: relative; z-index: 2; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:48px 20px; }
 h1{ font-size: clamp(36px,8vw,88px); letter-spacing:4px; text-shadow:0 0 20px rgba(255,255,255,0.06); }
+h2{ font-size:clamp(20px,5vw,32px); margin:20px 0 16px; color:#d0d0d0; font-weight:600; }
 .subtitle{ margin-top:8px; color:#bdbdbd; }
 
 .hero-actions{ margin-top:28px; display:flex; gap:14px; }
