@@ -13,13 +13,15 @@
 <canvas id="snow"></canvas>
 
 <nav class="nav-tabs">
-    <a href="index.html" class="active">Main Page</a>
-    <a href="games.html">Games</a>
+    <div class="nav-tabs-left">
+        <a href="index.html" class="active">Main Page</a>
+        <a href="games.html">Games</a>
+    </div>
+    <button class="settings-btn" id="settingsBtn">⚙️ Settings</button>
 </nav>
 
 <div class="container">
     <h1>Eclipse OD</h1>
-    <div class="subtitle">– zomo</div>
 
     <div class="quote-section">
         <p id="quote">"The only way to do great work is to love what you do." — Steve Jobs</p>
@@ -30,6 +32,84 @@
     </div>
 </div>
 <script>
+
+/* ========= SETTINGS SYSTEM ========= */
+const settings = {
+  animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
+  theme: localStorage.getItem('theme') || 'theme-dark',
+  urlSpoof: localStorage.getItem('urlSpoof') || ''
+};
+
+function applySetting(key, value) {
+  if (key === 'animationEnabled') {
+    document.body.classList.toggle('animations-disabled', !value);
+    document.querySelectorAll('[style*="animation"]').forEach(el => {
+      if (!value) el.classList.add('no-animation');
+      else el.classList.remove('no-animation');
+    });
+  } else if (key === 'theme') {
+    document.body.className = document.body.className.replace(/theme-\w+/, value);
+    document.body.classList.add(value);
+  }
+  localStorage.setItem(key, value);
+}
+
+function initializeSettings() {
+  document.body.classList.add(settings.theme);
+  if (!settings.animationEnabled) {
+    document.body.classList.add('animations-disabled');
+    document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
+      el.classList.add('no-animation');
+    });
+  }
+}
+
+initializeSettings();
+
+// Settings modal functionality
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsModal = document.getElementById('settingsModal');
+const closeBtn = document.querySelector('.close-settings');
+
+if (settingsBtn && settingsModal) {
+  settingsBtn.addEventListener('click', () => {
+    settingsModal.classList.add('open');
+  });
+  
+  closeBtn.addEventListener('click', () => {
+    settingsModal.classList.remove('open');
+  });
+  
+  settingsModal.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+      settingsModal.classList.remove('open');
+    }
+  });
+
+  // Theme selector
+  document.getElementById('themeSelect').addEventListener('change', (e) => {
+    const newTheme = e.target.value;
+    settings.theme = newTheme;
+    applySetting('theme', newTheme);
+  });
+
+  // Animation toggle
+  document.getElementById('animationToggle').addEventListener('change', (e) => {
+    settings.animationEnabled = e.target.checked;
+    applySetting('animationEnabled', e.target.checked);
+  });
+
+  // URL Spoof option
+  document.getElementById('urlSpoofInput').addEventListener('change', (e) => {
+    settings.urlSpoof = e.target.value;
+    localStorage.setItem('urlSpoof', e.target.value);
+  });
+
+  // Set current values
+  document.getElementById('themeSelect').value = settings.theme;
+  document.getElementById('animationToggle').checked = settings.animationEnabled;
+  document.getElementById('urlSpoofInput').value = settings.urlSpoof;
+}
 
 /* ========= INSPIRATIONAL QUOTES ========= */
 const quotes = [
@@ -110,6 +190,35 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 });
 </script>
+
+<!-- Settings Modal -->
+<div class="settings-modal" id="settingsModal">
+    <div class="settings-content">
+        <button class="close-settings">✕</button>
+        <h2>Settings</h2>
+        
+        <div class="settings-group">
+            <label>
+                <input type="checkbox" id="animationToggle"> Enable Animations
+            </label>
+        </div>
+
+        <div class="settings-group">
+            <label for="themeSelect">Theme:</label>
+            <select id="themeSelect">
+                <option value="theme-dark">Dark (Default)</option>
+                <option value="theme-neon">Neon</option>
+                <option value="theme-sunset">Sunset</option>
+                <option value="theme-ocean">Ocean</option>
+            </select>
+        </div>
+
+        <div class="settings-group">
+            <label for="urlSpoofInput">Spoof URL (optional):</label>
+            <input type="text" id="urlSpoofInput" placeholder="e.g., /games or blank">
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
