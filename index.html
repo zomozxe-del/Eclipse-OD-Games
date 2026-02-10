@@ -12,37 +12,42 @@
 
 <canvas id="snow"></canvas>
 
+<nav class="nav-tabs">
+    <a href="index.html" class="active">Main Page</a>
+    <a href="games.html">Games</a>
+</nav>
+
 <div class="container">
     <h1>Eclipse OD</h1>
     <div class="subtitle">– zomo</div>
 
-    <div class="hero-actions">
-        <a class="btn primary" href="games.html">Browse All Games</a>
+    <div class="quote-section">
+        <p id="quote">"The only way to do great work is to love what you do." — Steve Jobs</p>
     </div>
 
-    <div style="margin-top:60px; text-align:center;">
-        <h2 style="font-size:28px; margin-bottom:20px; color:#bdbdbd;">Featured Games</h2>
-        <div class="games-grid" id="featuredGames"></div>
+    <div class="game-count">
+        <strong id="gameCountText">200+ Games Available</strong>
     </div>
 </div>
 <script>
 
-/* ========= FEATURED GAMES ========= */
-const featuredGames = ['drift-boss', 'subway-surfers', 'cookie-clicker', 'crossy-road', 'slope', 'minecraft-1.12', 'geometry-dash', 'flappy-bird'];
+/* ========= INSPIRATIONAL QUOTES ========= */
+const quotes = [
+    "\"The only way to do great work is to love what you do.\" — Steve Jobs",
+    "\"Innovation distinguishes between a leader and a follower.\" — Steve Jobs",
+    "\"Life is what happens when you're busy making other plans.\" — John Lennon",
+    "\"The future belongs to those who believe in the beauty of their dreams.\" — Eleanor Roosevelt",
+    "\"It is during our darkest moments that we must focus to see the light.\" — Aristotle",
+    "\"The only impossible journey is the one you never begin.\" — Tony Robbins",
+    "\"Believe you can and you're halfway there.\" — Theodore Roosevelt",
+    "\"Dreams don't work unless you do.\" — John C. Maxwell"
+];
 
-function loadFeatured() {
-    const cont = document.getElementById('featuredGames');
-    featuredGames.forEach(game => {
-        const a = document.createElement('a');
-        a.className = 'card';
-        a.href = `https://education-eclipse.netlify.app/${game}`;
-        a.target = '_blank';
-        const name = game.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-        a.innerHTML = `<div class="title">${name}</div>`;
-        cont.appendChild(a);
-    });
+function getRandomQuote() {
+    return quotes[Math.floor(Math.random() * quotes.length)];
 }
-loadFeatured();
+
+document.getElementById('quote').textContent = getRandomQuote();
 
 /* ========= SNOW PARTICLES ========= */
 

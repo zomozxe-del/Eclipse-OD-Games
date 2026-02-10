@@ -8,20 +8,28 @@
 </head>
 <body>
   <canvas id="snow"></canvas>
-  <header class="page-header">
-    <a class="btn" href="index.html" style="position:absolute;top:18px;left:18px;">← Home</a>
-    <h1>Games</h1>
-    <div class="tools">Browse the collection — click a card to open and play</div>
-  </header>
 
-  <main>
+  <nav class="nav-tabs">
+    <a href="index.html">Main Page</a>
+    <a href="games.html" class="active">Games</a>
+  </nav>
+
+  <div class="games-container">
+    <div class="games-title-corner">
+      <h1>Games</h1>
+    </div>
+
+    <div class="games-controls">
+      <div class="loader" id="loader"></div>
+      <div class="loading-text" id="loadingText">Loading games...</div>
+    </div>
+
     <section class="games-grid" id="gamesGrid" aria-live="polite"></section>
-  </main>
+  </div>
 
   <script>
     // List of games collected from repository
     const games = [
-      ".DS_Store",
       "5b/",
       "ages-of-conflict/",
       "angry-birds/",
@@ -224,30 +232,44 @@
       "zooplop/"
     ];
 
-    const grid = document.getElementById('gamesGrid');
-
     function prettify(name){
       const s = name.replace(/\/+$/,'').replace(/[-_]/g,' ');
       return s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
     }
 
-    for(const g of games){
-      if(!g || g === '.DS_Store') continue;
-      const clean = g.replace(/\/+$/,'');
-      const href = (clean.endsWith('.html')) ? `assets/games/${clean}` : `assets/games/${clean}/index.html`;
+    function loadGames() {
+      const grid = document.getElementById('gamesGrid');
+      const loader = document.getElementById('loader');
+      const loadingText = document.getElementById('loadingText');
 
-      const a = document.createElement('a');
-      a.className = 'card';
-      a.href = href;
-      a.target = '_self';
+      // Simulate loading delay for visual effect
+      setTimeout(() => {
+        loader.style.display = 'none';
+        loadingText.style.display = 'none';
 
-      const title = document.createElement('div');
-      title.className = 'title';
-      title.textContent = prettify(clean.replace('.html',''));
+        for(const g of games){
+          if(!g || g === '.DS_Store') continue;
+          const clean = g.replace(/\/+$/,'');
+          const href = (clean.endsWith('.html')) ? `assets/games/${clean}` : `assets/games/${clean}/index.html`;
 
-      a.appendChild(title);
-      grid.appendChild(a);
+          const a = document.createElement('a');
+          a.className = 'card';
+          a.href = href;
+          a.target = '_self';
+
+          const title = document.createElement('div');
+          title.className = 'title';
+          title.textContent = prettify(clean.replace('.html',''));
+
+          a.appendChild(title);
+          grid.appendChild(a);
+        }
+      }, 600);
     }
+
+    loadGames();
+
+    /* ========= SNOW PARTICLES ========= */
 
     // Snow renderer reused from index (simple)
     (function(){
