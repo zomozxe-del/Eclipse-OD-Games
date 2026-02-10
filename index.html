@@ -17,7 +17,7 @@
         <a href="index.html" class="active">Main Page</a>
         <a href="games.html">Games</a>
     </div>
-    <button class="settings-btn" id="settingsBtn">⚙️ Settings</button>
+    <a href="https://education-eclipse.netlify.app/settings" class="settings-btn">⚙️ Settings</a>
 </nav>
 
 <div class="container">
@@ -43,7 +43,7 @@ const settings = {
 function applySetting(key, value) {
   if (key === 'animationEnabled') {
     document.body.classList.toggle('animations-disabled', !value);
-    document.querySelectorAll('[style*="animation"]').forEach(el => {
+    document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
       if (!value) el.classList.add('no-animation');
       else el.classList.remove('no-animation');
     });
@@ -66,51 +66,6 @@ function initializeSettings() {
 
 initializeSettings();
 
-// Settings modal functionality
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsModal = document.getElementById('settingsModal');
-const closeBtn = document.querySelector('.close-settings');
-
-if (settingsBtn && settingsModal) {
-  settingsBtn.addEventListener('click', () => {
-    settingsModal.classList.add('open');
-  });
-  
-  closeBtn.addEventListener('click', () => {
-    settingsModal.classList.remove('open');
-  });
-  
-  settingsModal.addEventListener('click', (e) => {
-    if (e.target === settingsModal) {
-      settingsModal.classList.remove('open');
-    }
-  });
-
-  // Theme selector
-  document.getElementById('themeSelect').addEventListener('change', (e) => {
-    const newTheme = e.target.value;
-    settings.theme = newTheme;
-    applySetting('theme', newTheme);
-  });
-
-  // Animation toggle
-  document.getElementById('animationToggle').addEventListener('change', (e) => {
-    settings.animationEnabled = e.target.checked;
-    applySetting('animationEnabled', e.target.checked);
-  });
-
-  // URL Spoof option
-  document.getElementById('urlSpoofInput').addEventListener('change', (e) => {
-    settings.urlSpoof = e.target.value;
-    localStorage.setItem('urlSpoof', e.target.value);
-  });
-
-  // Set current values
-  document.getElementById('themeSelect').value = settings.theme;
-  document.getElementById('animationToggle').checked = settings.animationEnabled;
-  document.getElementById('urlSpoofInput').value = settings.urlSpoof;
-}
-
 /* ========= INSPIRATIONAL QUOTES ========= */
 const quotes = [
     "\"The only way to do great work is to love what you do.\" — Steve Jobs",
@@ -120,7 +75,8 @@ const quotes = [
     "\"It is during our darkest moments that we must focus to see the light.\" — Aristotle",
     "\"The only impossible journey is the one you never begin.\" — Tony Robbins",
     "\"Believe you can and you're halfway there.\" — Theodore Roosevelt",
-    "\"Dreams don't work unless you do.\" — John C. Maxwell"
+    "\"Dreams don't work unless you do.\" — John C. Maxwell",
+    "\"U lowky look mad cute rn ;D\" — zomo :3"
 ];
 
 function getRandomQuote() {
@@ -190,35 +146,6 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 });
 </script>
-
-<!-- Settings Modal -->
-<div class="settings-modal" id="settingsModal">
-    <div class="settings-content">
-        <button class="close-settings">✕</button>
-        <h2>Settings</h2>
-        
-        <div class="settings-group">
-            <label>
-                <input type="checkbox" id="animationToggle"> Enable Animations
-            </label>
-        </div>
-
-        <div class="settings-group">
-            <label for="themeSelect">Theme:</label>
-            <select id="themeSelect">
-                <option value="theme-dark">Dark (Default)</option>
-                <option value="theme-neon">Neon</option>
-                <option value="theme-sunset">Sunset</option>
-                <option value="theme-ocean">Ocean</option>
-            </select>
-        </div>
-
-        <div class="settings-group">
-            <label for="urlSpoofInput">Spoof URL (optional):</label>
-            <input type="text" id="urlSpoofInput" placeholder="e.g., /games or blank">
-        </div>
-    </div>
-</div>
 
 </body>
 </html>

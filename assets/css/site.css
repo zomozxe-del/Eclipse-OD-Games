@@ -43,6 +43,16 @@ body.theme-ocean{
   --bg-darker: #000;
 }
 
+body.theme-bw{
+  --primary: #ffffff;
+  --secondary: #ffffff;
+  --bg-dark: #000000;
+  --bg-darker: #000000;
+  --accent-blue: #ffffff;
+  --text-light: #cccccc;
+  --text-muted: #ffffff;
+}
+
 canvas{ position: fixed; inset: 0; z-index: 0; }
 
 /* Navigation */
@@ -54,8 +64,9 @@ canvas{ position: fixed; inset: 0; z-index: 0; }
 .nav-tabs a.active.theme-neon{ background: rgba(0,255,136,0.08); }
 .nav-tabs a.active.theme-sunset{ background: rgba(255,107,107,0.08); }
 .nav-tabs a.active.theme-ocean{ background: rgba(0,212,255,0.08); }
+.nav-tabs a.active.theme-bw{ background: rgba(255,255,255,0.1); }
 
-.settings-btn{ padding: 10px 16px; margin-right: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #bdbdbd; cursor: pointer; border-radius: 6px; transition: all 0.2s ease; font-size: 14px; }
+.settings-btn{ padding: 10px 16px; margin-right: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #bdbdbd; cursor: pointer; border-radius: 6px; transition: all 0.2s ease; font-size: 14px; text-decoration: none; display: inline-block; }
 .settings-btn:hover{ background: rgba(255,255,255,0.1); color: #fff; }
 
 .container{ position: relative; z-index: 2; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:48px 20px; margin-top: 50px; }
@@ -74,19 +85,6 @@ h2.no-animation{ animation: none !important; opacity: 1; }
 
 .game-count{ margin-top: 20px; font-size: 16px; color: var(--accent-blue); background: rgba(136,136,255,0.08); padding: 12px 20px; border-radius: 8px; border: 1px solid rgba(136,136,255,0.2); animation: fadeIn 1.4s ease forwards; opacity: 0; }
 .game-count.no-animation{ animation: none !important; opacity: 1; }
-
-/* Settings Modal */
-.settings-modal{ position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: none; align-items: center; justify-content: center; }
-.settings-modal.open{ display: flex; }
-.settings-content{ background: rgba(20,20,35,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 28px; max-width: 400px; max-height: 80vh; overflow-y: auto; position: relative; }
-.settings-content h2{ margin-bottom: 20px; color: var(--primary); text-align: left; animation: none !important; opacity: 1; }
-.settings-group{ margin-bottom: 20px; text-align: left; }
-.settings-group label{ display: block; margin-bottom: 8px; font-size: 14px; color: #bdbdbd; }
-.settings-group input[type="checkbox"]{ margin-right: 8px; cursor: pointer; }
-.settings-group select, .settings-group input[type="text"]{ width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #eaeaea; font-size: 13px; }
-.settings-group select:focus, .settings-group input[type="text"]:focus{ outline: none; border-color: var(--primary); }
-.close-settings{ position: absolute; top: 8px; right: 12px; background: none; border: none; color: #bdbdbd; font-size: 24px; cursor: pointer; padding: 0; }
-.close-settings:hover{ color: #fff; }
 
 .hero-actions{ margin-top:28px; display:flex; gap:14px; }
 .btn{ display:inline-block; padding:12px 20px; border-radius:10px; text-decoration:none; color:inherit; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); transition:all .18s ease; }

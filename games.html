@@ -14,7 +14,7 @@
         <a href="index.html">Main Page</a>
         <a href="games.html" class="active">Games</a>
     </div>
-    <button class="settings-btn" id="settingsBtn">⚙️ Settings</button>
+    <a href="https://education-eclipse.netlify.app/settings" class="settings-btn">⚙️ Settings</a>
   </nav>
 
   <div class="games-container">
@@ -274,6 +274,32 @@
 
     loadGames();
 
+    /* ========= SETTINGS SYSTEM ========= */
+    const settings = {
+      animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
+      theme: localStorage.getItem('theme') || 'theme-dark',
+      urlSpoof: localStorage.getItem('urlSpoof') || ''
+    };
+
+    function applySetting(key, value) {
+      if (key === 'animationEnabled') {
+        document.body.classList.toggle('animations-disabled', !value);
+      } else if (key === 'theme') {
+        document.body.className = document.body.className.replace(/theme-\w+/, value);
+        document.body.classList.add(value);
+      }
+      localStorage.setItem(key, value);
+    }
+
+    function initializeSettings() {
+      document.body.classList.add(settings.theme);
+      if (!settings.animationEnabled) {
+        document.body.classList.add('animations-disabled');
+      }
+    }
+
+    initializeSettings();
+
     /* ========= SNOW PARTICLES ========= */
 
     // Snow renderer reused from index (simple)
@@ -289,106 +315,5 @@
     })();
   </script>
 
-<!-- Settings Modal -->
-<div class="settings-modal" id="settingsModal">
-    <div class="settings-content">
-        <button class="close-settings">✕</button>
-        <h2>Settings</h2>
-        
-        <div class="settings-group">
-            <label>
-                <input type="checkbox" id="animationToggle"> Enable Animations
-            </label>
-        </div>
-
-        <div class="settings-group">
-            <label for="themeSelect">Theme:</label>
-            <select id="themeSelect">
-                <option value="theme-dark">Dark (Default)</option>
-                <option value="theme-neon">Neon</option>
-                <option value="theme-sunset">Sunset</option>
-                <option value="theme-ocean">Ocean</option>
-            </select>
-        </div>
-
-        <div class="settings-group">
-            <label for="urlSpoofInput">Spoof URL (optional):</label>
-            <input type="text" id="urlSpoofInput" placeholder="e.g., /games or blank">
-        </div>
-    </div>
-</div>
-
-<script>
-/* ========= SETTINGS SYSTEM ========= */
-const settings = {
-  animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
-  theme: localStorage.getItem('theme') || 'theme-dark',
-  urlSpoof: localStorage.getItem('urlSpoof') || ''
-};
-
-function applySetting(key, value) {
-  if (key === 'animationEnabled') {
-    document.body.classList.toggle('animations-disabled', !value);
-  } else if (key === 'theme') {
-    document.body.className = document.body.className.replace(/theme-\w+/, value);
-    document.body.classList.add(value);
-  }
-  localStorage.setItem(key, value);
-}
-
-function initializeSettings() {
-  document.body.classList.add(settings.theme);
-  if (!settings.animationEnabled) {
-    document.body.classList.add('animations-disabled');
-  }
-}
-
-initializeSettings();
-
-// Settings modal functionality
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsModal = document.getElementById('settingsModal');
-const closeBtn = document.querySelector('.close-settings');
-
-if (settingsBtn && settingsModal) {
-  settingsBtn.addEventListener('click', () => {
-    settingsModal.classList.add('open');
-  });
-  
-  closeBtn.addEventListener('click', () => {
-    settingsModal.classList.remove('open');
-  });
-  
-  settingsModal.addEventListener('click', (e) => {
-    if (e.target === settingsModal) {
-      settingsModal.classList.remove('open');
-    }
-  });
-
-  // Theme selector
-  document.getElementById('themeSelect').addEventListener('change', (e) => {
-    const newTheme = e.target.value;
-    settings.theme = newTheme;
-    applySetting('theme', newTheme);
-  });
-
-  // Animation toggle
-  document.getElementById('animationToggle').addEventListener('change', (e) => {
-    settings.animationEnabled = e.target.checked;
-    applySetting('animationEnabled', e.target.checked);
-  });
-
-  // URL Spoof option
-  document.getElementById('urlSpoofInput').addEventListener('change', (e) => {
-    settings.urlSpoof = e.target.value;
-    localStorage.setItem('urlSpoof', e.target.value);
-  });
-
-  // Set current values
-  document.getElementById('themeSelect').value = settings.theme;
-  document.getElementById('animationToggle').checked = settings.animationEnabled;
-  document.getElementById('urlSpoofInput').value = settings.urlSpoof;
-}
-</script>
 </body>
 </html>
