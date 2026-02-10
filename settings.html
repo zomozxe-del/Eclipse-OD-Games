@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Settings — Eclipse OD</title>
+
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+<canvas id="snow"></canvas>
+
+<nav class="nav-tabs">
+    <div class="nav-tabs-left">
+        <a href="index.html">Main Page</a>
+        <a href="games.html">Games</a>
+        <a href="settings.html" class="active">Settings</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Settings</h1>
+
+    <div style="margin-top: 40px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+        <div class="settings-group">
+            <label style="font-size: 16px;">
+                <input type="checkbox" id="animationToggle" style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
+                <span style="font-weight: 600; color: #ffffff;">Enable Animations</span>
+            </label>
+            <p style="font-size: 13px; color: #cccccc; margin-top: 8px; margin-left: 30px;">Toggle smooth animations on titles and elements</p>
+        </div>
+
+        <div class="settings-group" style="margin-top: 24px;">
+            <label for="themeSelect" style="font-size: 16px; font-weight: 600; color: #ffffff;">Theme:</label>
+            <select id="themeSelect" style="margin-top: 8px; width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #ffffff; font-size: 14px;">
+                <option value="theme-bw">Black & White (Default)</option>
+                <option value="theme-dark">Dark Original</option>
+                <option value="theme-neon">Neon</option>
+                <option value="theme-sunset">Sunset</option>
+                <option value="theme-ocean">Ocean</option>
+            </select>
+        </div>
+
+        <div class="settings-group" style="margin-top: 24px;">
+            <label for="urlSpoofInput" style="font-size: 16px; font-weight: 600; color: #ffffff;">Spoof URL (optional):</label>
+            <input type="text" id="urlSpoofInput" placeholder="e.g., /games or blank" style="margin-top: 8px; width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #ffffff; font-size: 14px;">
+            <p style="font-size: 13px; color: #cccccc; margin-top: 8px;">This is a local setting and doesn't affect actual URLs</p>
+        </div>
+
+        <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="font-size: 13px; color: #aaaaaa; text-align: center;">All settings are saved locally in your browser</p>
+        </div>
+    </div>
+</div>
+
+<script>
+
+/* ========= SETTINGS SYSTEM ========= */
+const settings = {
+  animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
+  theme: localStorage.getItem('theme') || 'theme-bw',
+  urlSpoof: localStorage.getItem('urlSpoof') || ''
+};
+
+function applySetting(key, value) {
+  if (key === 'animationEnabled') {
+    document.body.classList.toggle('animations-disabled', !value);
+    document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
+      if (!value) el.classList.add('no-animation');
+      else el.classList.remove('no-animation');
+    });
+  } else if (key === 'theme') {
+    document.body.className = document.body.className.replace(/theme-\w+/, value);
+    document.body.classList.add(value);
+  }
+  localStorage.setItem(key, value);
+}
+
+function initializeSettings() {
+  document.body.classList.add(settings.theme);
+  if (!settings.animationEnabled) {
+    document.body.classList.add('animations-disabled');
+    document.querySelectorAll('h1, h2, .quote-section, .game-count').forEach(el => {
+      el.classList.add('no-animation');
+    });
+  }
+}
+
+initializeSettings();
+
+// Settings page functionality
+document.getElementById('themeSelect').addEventListener('change', (e) => {
+  const newTheme = e.target.value;
+  settings.theme = newTheme;
+  applySetting('theme', newTheme);
+});
+
+document.getElementById('animationToggle').addEventListener('change', (e) => {
+  settings.animationEnabled = e.target.checked;
+  applySetting('animationEnabled', e.target.checked);
+});
+
+document.getElementById('urlSpoofInput').addEventListener('change', (e) => {
+  settings.urlSpoof = e.target.value;
+  localStorage.setItem('urlSpoof', e.target.value);
+});
+
+// Set current values
+document.getElementById('themeSelect').value = settings.theme;
+document.getElementById('animationToggle').checked = settings.animationEnabled;
+document.getElementById('urlSpoofInput').value = settings.urlSpoof;
+
+/* ========= SNOW PARTICLES ========= */
+
+const canvas = document.getElementById('snow');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const flakes = [];
+
+for (let i = 0; i < 140; i++) {
+    flakes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 3 + 1,
+        d: Math.random() * 1
+    });
+}
+
+let angle = 0;
+
+function drawSnow() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+
+    for (let f of flakes) {
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    }
+
+    ctx.fill();
+    moveSnow();
+}
+
+function moveSnow() {
+    angle += 0.01;
+
+    for (let i = 0; i < flakes.length; i++) {
+        let f = flakes[i];
+
+        f.y += Math.pow(f.d, 2) + 0.8;
+        f.x += Math.sin(angle) * 0.4;
+
+        if (f.y > canvas.height) {
+            flakes[i] = {
+                x: Math.random() * canvas.width,
+                y: 0,
+                r: f.r,
+                d: f.d
+            };
+        }
+    }
+}
+
+setInterval(drawSnow, 33);
+
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+</script>
+
+</body>
+</html>

@@ -14,7 +14,7 @@
         <a href="index.html">Main Page</a>
         <a href="games.html" class="active">Games</a>
     </div>
-    <a href="https://education-eclipse.netlify.app/settings" class="settings-btn">⚙️ Settings</a>
+    <a href="settings.html" class="settings-btn">⚙️ Settings</a>
   </nav>
 
   <div class="games-container">
@@ -277,7 +277,7 @@
     /* ========= SETTINGS SYSTEM ========= */
     const settings = {
       animationEnabled: localStorage.getItem('animationEnabled') !== 'false',
-      theme: localStorage.getItem('theme') || 'theme-dark',
+      theme: localStorage.getItem('theme') || 'theme-bw',
       urlSpoof: localStorage.getItem('urlSpoof') || ''
     };
 
